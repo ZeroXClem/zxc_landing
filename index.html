@@ -991,30 +991,6 @@
             }
         });
 
-        // Handle contact form submission
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-
-            // Simulate form submission
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerText;
-
-            submitButton.disabled = true;
-            submitButton.innerText = 'Sending...';
-
-            // Simulate API call
-            setTimeout(() => {
-                submitButton.innerText = 'Message Sent!';
-                this.reset();
-
-                // Reset button after 3 seconds
-                setTimeout(() => {
-                    submitButton.innerText = originalText;
-                    submitButton.disabled = false;
-                }, 3000);
-            }, 1500);
-        });
-
         // Neural glow effect for words
         document.querySelectorAll('.neural-glow').forEach(element => {
             element.addEventListener('mouseover', () => {
