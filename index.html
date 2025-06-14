@@ -1,1025 +1,627 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ZeroXClem | The Future, Engineered Today</title>
-    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/gsap@3.9.1/dist/gsap.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
-        :root {
-            --primary: #5D5CDE;
-            --primary-dark: #4847b3;
-            --primary-light: #7e7de6;
-            --cosmic-purple: #8A2BE2;
-            --cosmic-blue: #1e3a8a;
-            --cyber-neon: #00f2ff;
-            --text-light: #f0f0f0;
-            --text-dark: #222222;
-            --glow-primary: 0 0 10px var(--primary), 0 0 20px var(--primary-light);
-            --glow-purple: 0 0 10px var(--cosmic-purple), 0 0 20px var(--cosmic-purple);
-        }
-
-        .dark {
-            --bg-primary: #181818;
-            --bg-secondary: #222222;
-            --text-primary: #f0f0f0;
-            --text-secondary: #c0c0c0;
-            --card-bg: rgba(40, 40, 50, 0.6);
-        }
-
-        :root:not(.dark) {
-            --bg-primary: #ffffff;
-            --bg-secondary: #f5f5f5;
-            --text-primary: #222222;
-            --text-secondary: #444444;
-            --card-bg: rgba(255, 255, 255, 0.8);
-        }
-
-        body {
-            font-family: 'Inter', sans-serif;
-            background-color: var(--bg-primary);
-            color: var(--text-primary);
-            transition: background-color 0.3s ease, color 0.3s ease;
-            cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235D5CDE' stroke-width='2'><circle cx='12' cy='12' r='10'/></svg>") 12 12, auto;
-            overflow-x: hidden;
-        }
-
-        h1, h2, h3, h4, h5, h6 {
-            font-family: 'Space Grotesk', sans-serif;
-        }
-
-        .cosmic-gradient {
-            background: linear-gradient(135deg, var(--cosmic-blue), var(--primary), var(--cosmic-purple));
-            background-size: 200% 200%;
-            animation: gradient 15s ease infinite;
-        }
-
-        .neural-grid {
-            background-image: 
-                radial-gradient(var(--primary-light) 1px, transparent 1px),
-                radial-gradient(var(--primary-light) 1px, transparent 1px);
-            background-size: 40px 40px;
-            background-position: 0 0, 20px 20px;
-            opacity: 0.1;
-            animation: pulse 4s ease-in-out infinite;
-        }
-
-        .glass-card {
-            background-color: var(--card-bg);
-            backdrop-filter: blur(10px);
-            -webkit-backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .glass-card:hover {
-            transform: translateY(-5px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(93, 92, 222, 0.3);
-            border: 1px solid rgba(138, 43, 226, 0.2);
-        }
-
-        .glass-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: inherit;
-            z-index: -1;
-            background: linear-gradient(135deg, rgba(93, 92, 222, 0.2), rgba(138, 43, 226, 0.1));
-            opacity: 0;
-            transition: opacity 0.4s ease;
-        }
-
-        .glass-card:hover::before {
-            opacity: 1;
-        }
-
-        .glass-card .card-shine {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            border-radius: inherit;
-            overflow: hidden;
-            z-index: -1;
-        }
-
-        .glass-card:hover .card-shine::after {
-            animation: shine 1.5s forwards;
-        }
-
-        .glass-card .card-shine::after {
-            content: '';
-            position: absolute;
-            top: -100%;
-            left: -100%;
-            width: 300%;
-            height: 300%;
-            background: linear-gradient(
-                115deg,
-                transparent 20%,
-                rgba(255, 255, 255, 0.1) 30%,
-                rgba(255, 255, 255, 0.2) 40%,
-                rgba(255, 255, 255, 0.1) 50%,
-                transparent 60%
-            );
-            transform: rotate(25deg);
-        }
-
-        .neural-glow {
-            position: relative;
-            display: inline-block;
-            transition: all 0.3s ease;
-        }
-
-        .neural-glow:hover {
-            text-shadow: var(--glow-primary);
-            color: #fff;
-            transform: translateY(-2px);
-        }
-
-        .neural-glow::after {
-            content: '';
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--primary), transparent);
-            bottom: -2px;
-            left: 0;
-            transform: scaleX(0);
-            transform-origin: center;
-            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-        }
-
-        .neural-glow:hover::after {
-            transform: scaleX(1);
-        }
-
-        .particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            top: 0;
-            left: 0;
-            z-index: 0;
-        }
-
-        .three-container {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 0;
-        }
-
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
-        }
-
-        @keyframes pulse {
-            0% { opacity: 0.05; }
-            50% { opacity: 0.15; }
-            100% { opacity: 0.05; }
-        }
-
-        @keyframes shine {
-            0% {
-                transform: translateY(100%) translateX(-100%) rotate(25deg);
-            }
-            100% {
-                transform: translateY(-100%) translateX(100%) rotate(25deg);
-            }
-        }
-
-        .hover-shine {
-            position: relative;
-            overflow: hidden;
-            transition: all 0.4s ease;
-            z-index: 1;
-        }
-
-        .hover-shine::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(45deg, transparent 45%, rgba(255, 255, 255, 0.1) 50%, transparent 55%);
-            z-index: -1;
-            transform: translateX(-100%);
-            transition: transform 0.6s cubic-bezier(0.165, 0.84, 0.44, 1);
-        }
-
-        .hover-shine:hover::before {
-            transform: translateX(100%);
-        }
-
-        .hover-shine:hover {
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 10px 25px rgba(93, 92, 222, 0.3);
-        }
-
-        /* Magnetic button effect */
-        .magnetic-btn {
-            position: relative;
-            cursor: none;
-            transition: all 0.3s ease-in-out;
-        }
-
-        /* Custom cursor */
-        .cursor {
-            width: 30px;
-            height: 30px;
-            border: 2px solid var(--primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            transition: all 0.2s ease;
-            z-index: 9999;
-            backdrop-filter: invert(20%);
-            -webkit-backdrop-filter: invert(20%);
-        }
-
-        .cursor-dot {
-            width: 8px;
-            height: 8px;
-            background-color: var(--primary);
-            border-radius: 50%;
-            position: fixed;
-            pointer-events: none;
-            transform: translate(-50%, -50%);
-            z-index: 9999;
-        }
-
-        /* Typing effect */
-        .typing-text {
-            display: inline-block;
-            border-right: 2px solid var(--primary);
-            padding-right: 4px;
-            animation: blink 0.75s step-end infinite;
-            white-space: nowrap;
-            overflow: hidden;
-        }
-
-        @keyframes blink {
-            from, to { border-color: transparent }
-            50% { border-color: var(--primary) }
-        }
-
-        /* Reveal animations */
-        .reveal {
-            position: relative;
-            opacity: 0;
-            transform: translateY(30px);
-            transition: all 0.8s cubic-bezier(0.5, 0, 0, 1);
-        }
-
-        .reveal.active {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Parallax effect */
-        .parallax {
-            transition: transform 0.1s cubic-bezier(0.2, 0.49, 0.32, 0.99);
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ZeroXClem | The Future, Engineered Today</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+  <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.132.2/build/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/gsap@3.9.1/dist/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vanilla-tilt@1.7.2/dist/vanilla-tilt.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+    :root {
+      --primary: #5D5CDE;
+      --primary-dark: #4847b3;
+      --primary-light: #7e7de6;
+      --cosmic-purple: #8A2BE2;
+      --cosmic-blue: #1e3a8a;
+      --cyber-neon: #00f2ff;
+      --text-light: #f0f0f0;
+      --text-dark: #222222;
+      --glow-primary: 0 0 10px var(--primary), 0 0 20px var(--primary-light);
+      --glow-purple: 0 0 10px var(--cosmic-purple), 0 0 20px var(--cosmic-purple);
+    }
+    .dark {
+      --bg-primary: #181818;
+      --bg-secondary: #222222;
+      --text-primary: #f0f0f0;
+      --text-secondary: #c0c0c0;
+      --card-bg: rgba(40, 40, 50, 0.6);
+    }
+    :root:not(.dark) {
+      --bg-primary: #ffffff;
+      --bg-secondary: #f5f5f5;
+      --text-primary: #222222;
+      --text-secondary: #444444;
+      --card-bg: rgba(255, 255, 255, 0.8);
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      transition: background-color 0.3s ease, color 0.3s ease;
+      cursor: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%235D5CDE' stroke-width='2'><circle cx='12' cy='12' r='10'/></svg>") 12 12, auto;
+      overflow-x: hidden;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: 'Space Grotesk', sans-serif;
+    }
+    .cosmic-gradient {
+      background: linear-gradient(135deg, var(--cosmic-blue), var(--primary), var(--cosmic-purple));
+      background-size: 200% 200%;
+      animation: gradient 15s ease infinite;
+    }
+    .neural-grid {
+      background-image:
+        radial-gradient(var(--primary-light) 1px, transparent 1px),
+        radial-gradient(var(--primary-light) 1px, transparent 1px);
+      background-size: 40px 40px;
+      background-position: 0 0, 20px 20px;
+      opacity: 0.1;
+      animation: pulse 4s ease-in-out infinite;
+    }
+    .glass-card {
+      background-color: var(--card-bg);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
+    }
+    .glass-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 15px 40px rgba(93, 92, 222, 0.3);
+      border: 1px solid rgba(138, 43, 226, 0.2);
+    }
+    .glass-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: inherit;
+      z-index: -1;
+      background: linear-gradient(135deg, rgba(93, 92, 222, 0.2), rgba(138, 43, 226, 0.1));
+      opacity: 0;
+      transition: opacity 0.4s ease;
+    }
+    .glass-card:hover::before {
+      opacity: 1;
+    }
+    .glass-card .card-shine {
+      position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+      border-radius: inherit; overflow: hidden; z-index: -1;
+    }
+    .glass-card:hover .card-shine::after {
+      animation: shine 1.5s forwards;
+    }
+    .glass-card .card-shine::after {
+      content: '';
+      position: absolute; top: -100%; left: -100%;
+      width: 300%; height: 300%;
+      background: linear-gradient(115deg, transparent 20%, rgba(255,255,255,0.1) 30%, rgba(255,255,255,0.2) 40%, rgba(255,255,255,0.1) 50%, transparent 60%);
+      transform: rotate(25deg);
+    }
+    .neural-glow {
+      position: relative; display: inline-block; transition: all 0.3s ease;
+    }
+    .neural-glow:hover {
+      text-shadow: var(--glow-primary); color: #fff; transform: translateY(-2px);
+    }
+    .neural-glow::after {
+      content: ''; position: absolute; width: 100%; height: 2px;
+      background: linear-gradient(90deg, transparent, var(--primary), transparent);
+      bottom: -2px; left: 0; transform: scaleX(0); transform-origin: center;
+      transition: transform 0.4s cubic-bezier(0.175,0.885,0.32,1.275);
+    }
+    .neural-glow:hover::after {
+      transform: scaleX(1);
+    }
+    .hover-shine { position: relative; overflow: hidden; transition: all 0.4s ease; z-index: 1; }
+    .hover-shine::before {
+      content: '';
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      background: linear-gradient(45deg, transparent 45%, rgba(255,255,255,0.1) 50%, transparent 55%);
+      z-index: -1; transform: translateX(-100%); transition: transform 0.6s cubic-bezier(0.165,0.84,0.44,1);
+    }
+    .hover-shine:hover::before { transform: translateX(100%); }
+    .hover-shine:hover { transform: translateY(-3px) scale(1.02); box-shadow: 0 10px 25px rgba(93,92,222,0.3); }
+    .magnetic-btn { position: relative; cursor: none; transition: all 0.3s ease-in-out; }
+    .cursor {
+      width: 30px; height: 30px; border: 2px solid var(--primary);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      transform: translate(-50%,-50%); transition: all 0.2s ease; z-index: 9999;
+      backdrop-filter: invert(20%); -webkit-backdrop-filter: invert(20%);
+    }
+    .cursor-dot {
+      width: 8px; height: 8px; background-color: var(--primary);
+      border-radius: 50%; position: fixed; pointer-events: none;
+      transform: translate(-50%,-50%); z-index: 9999;
+    }
+    .typing-text {
+      display: inline-block; border-right: 2px solid var(--primary);
+      padding-right: 4px; animation: blink 0.75s step-end infinite;
+      white-space: nowrap; overflow: hidden;
+    }
+    @keyframes blink { from,to { border-color: transparent } 50% { border-color: var(--primary) } }
+    @keyframes gradient { 0% { background-position: 0% 50% } 50% { background-position: 100% 50% } 100% { background-position: 0% 50% } }
+    @keyframes pulse { 0% { opacity: 0.05 } 50% { opacity: 0.15 } 100% { opacity: 0.05 } }
+    @keyframes shine {
+      0% { transform: translateY(100%) translateX(-100%) rotate(25deg); }
+      100% { transform: translateY(-100%) translateX(100%) rotate(25deg); }
+    }
+    .reveal { position: relative; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.5,0,0,1); }
+    .reveal.active { opacity: 1; transform: translateY(0); }
+    .parallax { transition: transform 0.1s cubic-bezier(0.2,0.49,0.32,0.99); }
+  </style>
 </head>
 <body>
-    <div class="min-h-screen flex flex-col">
-        <!-- Navbar -->
-        <nav class="glass-card z-50 sticky top-0 px-6 py-4 flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <div class="h-10 w-10 relative overflow-hidden rounded-lg">
-                    <div class="absolute inset-0 cosmic-gradient"></div>
-                    <div class="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">ZX</div>
-                </div>
-                <span class="text-xl font-bold">ZeroXClem</span>
-            </div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#vision" class="hover:text-primary-light transition-colors">Vision</a>
-                <a href="#services" class="hover:text-primary-light transition-colors">Services</a>
-                <a href="#projects" class="hover:text-primary-light transition-colors">Projects</a>
-                <a href="#contact" class="hover:text-primary-light transition-colors">Contact</a>
-            </div>
-            <div class="flex items-center space-x-4">
-                <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
-                    <svg id="dark-icon" class="h-5 w-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"></path>
-                    </svg>
-                    <svg id="light-icon" class="h-5 w-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
-                        <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
-                    </svg>
-                </button>
-                <button class="md:hidden" id="mobile-menu-button">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16" />
-                    </svg>
-                </button>
-            </div>
-        </nav>
-
-        <!-- Mobile menu (hidden by default) -->
-        <div id="mobile-menu" class="hidden glass-card absolute top-20 right-6 p-4 z-50 rounded-lg flex flex-col space-y-4">
-            <a href="#vision" class="hover:text-primary-light transition-colors">Vision</a>
-            <a href="#services" class="hover:text-primary-light transition-colors">Services</a>
-            <a href="#projects" class="hover:text-primary-light transition-colors">Projects</a>
-            <a href="#contact" class="hover:text-primary-light transition-colors">Contact</a>
+  <div class="min-h-screen flex flex-col">
+    <!-- Navbar -->
+    <nav class="glass-card z-50 sticky top-0 px-6 py-4 flex justify-between items-center">
+      <div class="flex items-center space-x-2">
+        <div class="h-10 w-10 relative overflow-hidden rounded-lg">
+          <div class="absolute inset-0 cosmic-gradient"></div>
+          <div class="absolute inset-0 flex items-center justify-center text-white font-bold text-xl">ZX</div>
         </div>
+        <span class="text-xl font-bold">ZeroXClem</span>
+      </div>
+      <div class="hidden md:flex space-x-6">
+        <a href="#vision" class="hover:text-primary-light transition-colors">Vision</a>
+        <a href="#services" class="hover:text-primary-light transition-colors">Services</a>
+        <a href="#projects" class="hover:text-primary-light transition-colors">Projects</a>
+        <a href="#contact" class="hover:text-primary-light transition-colors">Contact</a>
+      </div>
+      <div class="flex items-center space-x-4">
+        <button id="theme-toggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">
+          <svg id="dark-icon" class="h-5 w-5 hidden dark:block" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M10 2a8 8 0 100 16 8 8 0 000-16zm0 14a6 6 0 110-12 6 6 0 010 12z"></path>
+          </svg>
+          <svg id="light-icon" class="h-5 w-5 block dark:hidden" fill="currentColor" viewBox="0 0 20 20">
+            <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"></path>
+          </svg>
+        </button>
+        <button class="md:hidden" id="mobile-menu-button">
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+        </button>
+      </div>
+    </nav>
 
-        <!-- Hero Section -->
-        <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-20 px-6">
-            <div class="absolute inset-0 neural-grid"></div>
-            <div class="absolute inset-0 opacity-20 overflow-hidden cosmic-gradient"></div>
-            <div id="particles-js" class="absolute inset-0 z-0"></div>
-            <div id="neural-network" class="three-container"></div>
-            
-            <div class="relative z-10 max-w-5xl mx-auto text-center">
-                <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
-                    <span class="block" id="typing-title">Revolutionizing AI,</span>
-                    <span class="block mt-2">One Mind at a Time</span>
-                </h1>
-                <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-secondary">
-                    A portal into the next evolution of intelligence, leading-edge AI innovation equals ZeroXClem.
-                </p>
-                <a href="#contact" class="magnetic-btn hover-shine px-8 py-4 text-lg font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-transform transform hover:scale-105">
-                    Start Your AI Journey
-                </a>
-            </div>
-            
-            <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
-                </svg>
-            </div>
-        </section>
-
-        <!-- Vision Section -->
-        <section id="vision" class="relative py-20 px-6">
-            <div class="max-w-5xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Our Vision: AI Beyond Limits</h2>
-                <div class="glass-card p-8 rounded-2xl">
-                    <p class="text-xl leading-relaxed">
-                        At <span class="font-bold neural-glow">ZeroXClem</span>, we don't just build AI—we 
-                        <span class="neural-glow">craft intelligence</span> that evolves, adapts, and 
-                        <span class="neural-glow">transcends boundaries</span>. Our mission is to shape a future where 
-                        technology is not just smart but profoundly 
-                        <span class="neural-glow">intuitive</span>, working in harmony with 
-                        <span class="neural-glow">human ingenuity</span>.
-                    </p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Services Section -->
-        <section id="services" class="relative py-20 px-6 overflow-hidden">
-            <div class="absolute inset-0 neural-grid"></div>
-            <div class="max-w-5xl mx-auto relative z-10">
-                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Our Services: Cutting-Edge AI Solutions</h2>
-                
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Service 1 -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
-                        <div class="text-4xl mb-4 text-primary">1️⃣</div>
-                        <h3 class="text-xl font-bold mb-3">AI Model Development</h3>
-                        <p class="flex-grow">We design and fine-tune state-of-the-art machine learning models for diverse applications, with special expertise in model merging and optimizations.</p>
-                    </div>
-                    
-                    <!-- Service 2 -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
-                        <div class="text-4xl mb-4 text-primary">2️⃣</div>
-                        <h3 class="text-xl font-bold mb-3">Custom AI Agents</h3>
-                        <p class="flex-grow">Intelligent, automated agents tailored for business, research, and creativity that adapt to your specific needs.</p>
-                    </div>
-                    
-                    <!-- Service 3 -->
-                    <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
-                        <div class="text-4xl mb-4 text-primary">3️⃣</div>
-                        <h3 class="text-xl font-bold mb-3">AI Strategy & Consulting</h3>
-                        <p class="flex-grow">Expert guidance in deploying AI solutions at scale, helping you navigate the complex landscape of AI technologies.</p>
-                    </div>
-                </div>
-                
-                <div class="text-center mt-12">
-                    <a href="#contact" class="hover-shine px-6 py-3 text-lg font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-transform transform hover:scale-105">
-                        Explore Our AI Services
-                    </a>
-                </div>
-            </div>
-        </section>
-
-        <!-- Projects Section -->
-        <section id="projects" class="relative py-20 px-6">
-            <div class="max-w-5xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Case Studies & Impact</h2>
-                
-                <div class="grid md:grid-cols-3 gap-8">
-                    <!-- Project 1 -->
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-48 bg-cosmic-blue relative">
-                            <div class="absolute inset-0 flex items-center justify-center text-white text-5xl opacity-50">📚</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2">AI Dev Insights</h3>
-                            <p class="mb-4">A comprehensive resource for developers looking to harness AI technologies, featuring guides on Mamba, Gemma 3, LM Studio, and more.</p>
-                            <a href="https://aidev.zeroxclem.com" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Visit Website →</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Project 2 -->
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-48 bg-primary relative">
-                            <div class="absolute inset-0 flex items-center justify-center text-white text-5xl opacity-50">🧠</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2">Model Merges on HuggingFace</h3>
-                            <p class="mb-4">A collection of 145+ innovative AI model merges and variants, showcasing our expertise in model optimization and customization.</p>
-                            <a href="https://huggingface.co/ZeroXClem" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Explore Models →</a>
-                        </div>
-                    </div>
-                    
-                    <!-- Project 3 -->
-                    <div class="glass-card rounded-2xl overflow-hidden">
-                        <div class="h-48 bg-cosmic-purple relative">
-                            <div class="absolute inset-0 flex items-center justify-center text-white text-5xl opacity-50">🔬</div>
-                        </div>
-                        <div class="p-6">
-                            <h3 class="text-xl font-bold mb-2">Die Yield Calculator</h3>
-                            <p class="mb-4">An interactive Streamlit app for simulating semiconductor die yield, enabling users to model wafer/panel layouts and visualize results.</p>
-                            <a href="https://die-yield-calculator.streamlit.app/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Try The App →</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Contact Section -->
-        <section id="contact" class="relative py-20 px-6 overflow-hidden">
-            <div class="absolute inset-0 neural-grid"></div>
-            <div class="max-w-3xl mx-auto relative z-10">
-                <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Get in Touch & Collaborate</h2>
-                
-                <div class="glass-card p-8 rounded-2xl">
-                    <form id="contact-form" class="space-y-6">
-                        <div class="grid md:grid-cols-2 gap-6">
-                            <div>
-                                <label for="name" class="block mb-2 font-medium">Name</label>
-                                <input 
-                                    type="text" 
-                                    id="name" 
-                                    name="name" 
-                                    class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
-                                    required
-                                >
-                            </div>
-                            <div>
-                                <label for="email" class="block mb-2 font-medium">Email</label>
-                                <input 
-                                    type="email" 
-                                    id="email" 
-                                    name="email" 
-                                    class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
-                                    required
-                                >
-                            </div>
-                        </div>
-                        
-                        <div>
-                            <label for="ai-needs" class="block mb-2 font-medium">AI Needs</label>
-                            <select 
-                                id="ai-needs" 
-                                name="ai-needs" 
-                                class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
-                            >
-                                <option value="">Select your primary interest</option>
-                                <option value="model-development">AI Model Development</option>
-                                <option value="custom-agents">Custom AI Agents</option>
-                                <option value="consulting">AI Strategy & Consulting</option>
-                                <option value="other">Other</option>
-                            </select>
-                        </div>
-                        
-                        <div>
-                            <label for="message" class="block mb-2 font-medium">Message</label>
-                            <textarea 
-                                id="message" 
-                                name="message" 
-                                rows="4" 
-                                class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
-                                required
-                            ></textarea>
-                        </div>
-                        
-                        <div class="text-center">
-                            <button 
-                                type="submit" 
-                                class="hover-shine px-8 py-4 text-lg font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-transform transform hover:scale-105"
-                            >
-                                Begin Your AI Evolution
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </section>
-
-        <!-- Footer -->
-        <footer class="glass-card py-12 px-6 mt-auto">
-            <div class="max-w-5xl mx-auto">
-                <div class="flex flex-col md:flex-row justify-between items-center">
-                    <div class="mb-6 md:mb-0">
-                        <div class="flex items-center space-x-2">
-                            <div class="h-8 w-8 relative overflow-hidden rounded-lg">
-                                <div class="absolute inset-0 cosmic-gradient"></div>
-                                <div class="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">ZX</div>
-                            </div>
-                            <span class="text-lg font-bold">ZeroXClem</span>
-                        </div>
-                        <p class="mt-2 text-sm opacity-70">
-                            "The future is not ahead of us. <strong>We are the future.</strong>"
-                        </p>
-                    </div>
-                    
-                    <div class="flex space-x-6">
-                        <a href="https://twitter.com/zeroxclem" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-                            </svg>
-                        </a>
-                        <a href="https://github.com/zeroxclem" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                        <a href="https://linkedin.com/in/zeroxclem" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
-                            <svg class="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                                <path fill-rule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clip-rule="evenodd" />
-                            </svg>
-                        </a>
-                    </div>
-                </div>
-                
-                <div class="border-t border-gray-300 dark:border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
-                    <p>© 2025 ZeroXClem. All rights reserved.</p>
-                    <div class="flex space-x-6 mt-4 md:mt-0">
-                        <a href="#" class="hover:text-primary transition-colors">Privacy Policy</a>
-                        <a href="#" class="hover:text-primary transition-colors">Terms of Service</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+    <!-- Mobile menu -->
+    <div id="mobile-menu" class="hidden glass-card absolute top-20 right-6 p-4 z-50 rounded-lg flex flex-col space-y-4">
+      <a href="#vision" class="hover:text-primary-light transition-colors">Vision</a>
+      <a href="#services" class="hover:text-primary-light transition-colors">Services</a>
+      <a href="#projects" class="hover:text-primary-light transition-colors">Projects</a>
+      <a href="#contact" class="hover:text-primary-light transition-colors">Contact</a>
     </div>
 
-    <script>
-        // Custom cursor
-        const cursor = document.createElement('div');
-        cursor.classList.add('cursor');
-        document.body.appendChild(cursor);
+    <!-- Hero Section -->
+    <section class="relative min-h-screen flex items-center justify-center overflow-hidden py-20 px-6">
+      <div class="absolute inset-0 neural-grid"></div>
+      <div class="absolute inset-0 opacity-20 overflow-hidden cosmic-gradient"></div>
+      <div id="particles-js" class="absolute inset-0 z-0"></div>
+      <div id="neural-network" class="three-container"></div>
 
-        const cursorDot = document.createElement('div');
-        cursorDot.classList.add('cursor-dot');
-        document.body.appendChild(cursorDot);
+      <div class="relative z-10 max-w-5xl mx-auto text-center">
+        <h1 class="text-4xl md:text-6xl lg:text-7xl font-bold mb-6">
+          <span class="block" id="typing-title">Revolutionizing AI,</span>
+          <span class="block mt-2">One Mind at a Time</span>
+        </h1>
+        <p class="text-xl md:text-2xl mb-10 max-w-3xl mx-auto text-secondary">
+          A portal into the next evolution of intelligence, leading-edge AI innovation equals ZeroXClem.
+        </p>
+        <a href="#contact" class="magnetic-btn hover-shine px-8 py-4 text-lg font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-transform transform hover:scale-105">
+          Start Your AI Journey
+        </a>
+      </div>
 
-        document.addEventListener('mousemove', (e) => {
-            cursor.style.left = `${e.clientX}px`;
-            cursor.style.top = `${e.clientY}px`;
-            
-            cursorDot.style.left = `${e.clientX}px`;
-            cursorDot.style.top = `${e.clientY}px`;
-        });
+      <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 animate-bounce">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"/>
+        </svg>
+      </div>
+    </section>
 
-        // Make cursor bigger on hover over interactive elements
-        document.querySelectorAll('a, button, input, select, textarea, .neural-glow, .magnetic-btn').forEach(element => {
-            element.addEventListener('mouseenter', () => {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
-                cursor.style.borderColor = 'var(--primary-light)';
-                cursor.style.backgroundColor = 'rgba(93, 92, 222, 0.1)';
-            });
-            
-            element.addEventListener('mouseleave', () => {
-                cursor.style.transform = 'translate(-50%, -50%) scale(1)';
-                cursor.style.borderColor = 'var(--primary)';
-                cursor.style.backgroundColor = 'transparent';
-            });
-        });
+    <!-- Vision Section -->
+    <section id="vision" class="relative py-20 px-6">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Our Vision: AI Beyond Limits</h2>
+        <div class="glass-card p-8 rounded-2xl">
+          <p class="text-xl leading-relaxed">
+            At <span class="font-bold neural-glow">ZeroXClem</span>, we don't just build AI—we
+            <span class="neural-glow">craft intelligence</span> that evolves, adapts, and
+            <span class="neural-glow">transcends boundaries</span>. Our mission is to shape a future where
+            technology is not just smart but profoundly
+            <span class="neural-glow">intuitive</span>, working in harmony with
+            <span class="neural-glow">human ingenuity</span>.
+          </p>
+        </div>
+      </div>
+    </section>
 
-        // Magnetic button effect
-        document.querySelectorAll('.magnetic-btn').forEach(btn => {
-            btn.addEventListener('mousemove', (e) => {
-                const btnRect = btn.getBoundingClientRect();
-                const btnX = btnRect.left + btnRect.width / 2;
-                const btnY = btnRect.top + btnRect.height / 2;
-                
-                const deltaX = e.clientX - btnX;
-                const deltaY = e.clientY - btnY;
-                
-                const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
-                const maxDistance = Math.max(btnRect.width, btnRect.height) / 2;
-                
-                if (distance < maxDistance) {
-                    const moveX = deltaX * 0.3;
-                    const moveY = deltaY * 0.3;
-                    
-                    btn.style.transform = `translate(${moveX}px, ${moveY}px) scale(1.05)`;
-                }
-            });
-            
-            btn.addEventListener('mouseleave', () => {
-                btn.style.transform = '';
-            });
-        });
+    <!-- Services Section -->
+    <section id="services" class="relative py-20 px-6 overflow-hidden">
+      <div class="absolute inset-0 neural-grid"></div>
+      <div class="max-w-5xl mx-auto relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Our Services: Cutting-Edge AI Solutions</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
+            <div class="text-4xl mb-4 text-primary">1️⃣</div>
+            <h3 class="text-xl font-bold mb-3">AI Model Development</h3>
+            <p class="flex-grow">We design and fine-tune state-of-the-art machine learning models for diverse applications, with special expertise in model merging and optimizations.</p>
+          </div>
+          <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
+            <div class="text-4xl mb-4 text-primary">2️⃣</div>
+            <h3 class="text-xl font-bold mb-3">Custom AI Agents</h3>
+            <p class="flex-grow">Intelligent, automated agents tailored for business, research, and creativity that adapt to your specific needs.</p>
+          </div>
+          <div class="glass-card p-6 rounded-2xl flex flex-col h-full">
+            <div class="text-4xl mb-4 text-primary">3️⃣</div>
+            <h3 class="text-xl font-bold mb-3">AI Strategy & Consulting</h3>
+            <p class="flex-grow">Expert guidance in deploying AI solutions at scale, helping you navigate the complex landscape of AI technologies.</p>
+          </div>
+        </div>
+        <div class="text-center mt-12">
+          <a href="#contact" class="hover-shine px-6 py-3 text-lg font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-transform transform hover:scale-105">
+            Explore Our AI Services
+          </a>
+        </div>
+      </div>
+    </section>
 
-        // Typing effect
-        function typeWriter(element, text, speed = 50, callback) {
-            let i = 0;
-            element.innerHTML = '';
-            element.classList.add('typing-text');
-            
-            function type() {
-                if (i < text.length) {
-                    element.innerHTML += text.charAt(i);
-                    i++;
-                    setTimeout(type, speed);
-                } else {
-                    element.classList.remove('typing-text');
-                    if (callback) callback();
-                }
-            }
-            
-            type();
+    <!-- Projects Section -->
+    <section id="projects" class="relative py-20 px-6">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Case Studies & Impact</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="h-48 bg-cosmic-blue relative">
+              <div class="absolute inset-0 flex items-center justify-center text-white text-5xl opacity-50">📚</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">AI Dev Insights</h3>
+              <p class="mb-4">A comprehensive resource for developers looking to harness AI technologies, featuring guides on Mamba, Gemma 3, LM Studio, and more.</p>
+              <a href="https://aidev.zeroxclem.com" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Visit Website →</a>
+            </div>
+          </div>
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="h-48 bg-primary relative">
+              <div class="absolute inset-0 flex items-center justify-center text-white text-5xl opacity-50">🧠</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Model Merges on HuggingFace</h3>
+              <p class="mb-4">A collection of 145+ innovative AI model merges and variants, showcasing our expertise in model optimization and customization.</p>
+              <a href="https://huggingface.co/ZeroXClem" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Explore Models →</a>
+            </div>
+          </div>
+          <div class="glass-card rounded-2xl overflow-hidden">
+            <div class="h-48 bg-cosmic-purple relative">
+              <div class="absolute inset-0 flex items-center justify-center text-white text-5xl opacity-50">🔬</div>
+            </div>
+            <div class="p-6">
+              <h3 class="text-xl font-bold mb-2">Die Yield Calculator</h3>
+              <p class="mb-4">An interactive Streamlit app for simulating semiconductor die yield, enabling users to model wafer/panel layouts and visualize results.</p>
+              <a href="https://die-yield-calculator.streamlit.app/" target="_blank" rel="noopener noreferrer" class="text-primary hover:underline">Try The App →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Contact Section with Formspree integration -->
+    <section id="contact" class="relative py-20 px-6 overflow-hidden">
+      <div class="absolute inset-0 neural-grid"></div>
+      <div class="max-w-3xl mx-auto relative z-10">
+        <h2 class="text-3xl md:text-4xl font-bold mb-10 text-center">Get in Touch & Collaborate</h2>
+        <div class="glass-card p-8 rounded-2xl">
+          <form
+            id="contact-form"
+            action="https://formspree.io/f/xrbkkblp"
+            method="POST"
+            class="space-y-6"
+          >
+            <div class="grid md:grid-cols-2 gap-6">
+              <div>
+                <label for="name" class="block mb-2 font-medium">Name</label>
+                <input
+                  type="text"
+                  id="name"
+                  name="name"
+                  class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                  required
+                >
+              </div>
+              <div>
+                <label for="email" class="block mb-2 font-medium">Email</label>
+                <input
+                  type="email"
+                  id="email"
+                  name="email"
+                  class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                  required
+                >
+              </div>
+            </div>
+            <div>
+              <label for="ai-needs" class="block mb-2 font-medium">AI Needs</label>
+              <select
+                id="ai-needs"
+                name="ai-needs"
+                class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+              >
+                <option value="">Select your primary interest</option>
+                <option value="model-development">AI Model Development</option>
+                <option value="custom-agents">Custom AI Agents</option>
+                <option value="consulting">AI Strategy & Consulting</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label for="message" class="block mb-2 font-medium">Message</label>
+              <textarea
+                id="message"
+                name="message"
+                rows="4"
+                class="w-full px-4 py-3 rounded-lg bg-opacity-20 bg-white dark:bg-opacity-10 dark:bg-black border border-gray-300 dark:border-gray-700 focus:outline-none focus:ring-2 focus:ring-primary"
+                required
+              ></textarea>
+            </div>
+            <div class="text-center">
+              <button
+                type="submit"
+                class="hover-shine px-8 py-4 text-lg font-semibold text-white bg-primary hover:bg-primary-dark rounded-lg transition-transform transform hover:scale-105"
+              >
+                Begin Your AI Evolution
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="glass-card py-12 px-6 mt-auto">
+      <div class="max-w-5xl mx-auto">
+        <div class="flex flex-col md:flex-row justify-between items-center">
+          <div class="mb-6 md:mb-0">
+            <div class="flex items-center space-x-2">
+              <div class="h-8 w-8 relative overflow-hidden rounded-lg">
+                <div class="absolute inset-0 cosmic-gradient"></div>
+                <div class="absolute inset-0 flex items-center justify-center text-white font-bold text-sm">ZX</div>
+              </div>
+              <span class="text-lg font-bold">ZeroXClem</span>
+            </div>
+            <p class="mt-2 text-sm opacity-70">
+              "The future is not ahead of us. <strong>We are the future.</strong>"
+            </p>
+          </div>
+          <div class="flex space-x-6">
+            <a href="https://twitter.com/zeroxclem" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+              <!-- Twitter SVG → -->
+            </a>
+            <a href="https://github.com/zeroxclem" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+              <!-- GitHub SVG → -->
+            </a>
+            <a href="https://linkedin.com/in/zeroxclem" target="_blank" rel="noopener noreferrer" class="hover:text-primary transition-colors">
+              <!-- LinkedIn SVG → -->
+            </a>
+          </div>
+        </div>
+        <div class="border-t border-gray-300 dark:border-gray-700 mt-8 pt-8 flex flex-col md:flex-row justify-between items-center text-sm">
+          <p>© 2025 ZeroXClem. All rights reserved.</p>
+          <div class="flex space-x-6 mt-4 md:mt-0">
+            <a href="#" class="hover:text-primary transition-colors">Privacy Policy</a>
+            <a href="#" class="hover:text-primary transition-colors">Terms of Service</a>
+          </div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    // Custom cursor
+    const cursor = document.createElement('div');
+    cursor.classList.add('cursor');
+    document.body.appendChild(cursor);
+    const cursorDot = document.createElement('div');
+    cursorDot.classList.add('cursor-dot');
+    document.body.appendChild(cursorDot);
+    document.addEventListener('mousemove', e => {
+      cursor.style.left = \`\${e.clientX}px\`;
+      cursor.style.top = \`\${e.clientY}px\`;
+      cursorDot.style.left = \`\${e.clientX}px\`;
+      cursorDot.style.top = \`\${e.clientY}px\`;
+    });
+    document.querySelectorAll('a, button, input, select, textarea, .neural-glow, .magnetic-btn').forEach(el => {
+      el.addEventListener('mouseenter', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1.5)';
+        cursor.style.borderColor = 'var(--primary-light)';
+        cursor.style.backgroundColor = 'rgba(93, 92, 222, 0.1)';
+      });
+      el.addEventListener('mouseleave', () => {
+        cursor.style.transform = 'translate(-50%, -50%) scale(1)';
+        cursor.style.borderColor = 'var(--primary)';
+        cursor.style.backgroundColor = 'transparent';
+      });
+    });
+
+    // Magnetic button effect
+    document.querySelectorAll('.magnetic-btn').forEach(btn => {
+      btn.addEventListener('mousemove', e => {
+        const rect = btn.getBoundingClientRect();
+        const dx = e.clientX - (rect.left + rect.width/2);
+        const dy = e.clientY - (rect.top + rect.height/2);
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        const max = Math.max(rect.width, rect.height)/2;
+        if (dist < max) {
+          btn.style.transform = \`translate(\${dx*0.3}px, \${dy*0.3}px) scale(1.05)\`;
         }
-        
-        // Initialize typing effect
-        window.addEventListener('load', () => {
-            const titleElement = document.getElementById('typing-title');
-            const originalText = titleElement.textContent;
-            typeWriter(titleElement, originalText);
-        });
+      });
+      btn.addEventListener('mouseleave', () => btn.style.transform = '');
+    });
 
-        // Initialize particle.js
-        if (typeof particlesJS !== 'undefined') {
-            particlesJS('particles-js', {
-                particles: {
-                    number: {
-                        value: 60,
-                        density: {
-                            enable: true,
-                            value_area: 800
-                        }
-                    },
-                    color: {
-                        value: '#5D5CDE'
-                    },
-                    shape: {
-                        type: 'circle',
-                        stroke: {
-                            width: 0,
-                            color: '#000000'
-                        }
-                    },
-                    opacity: {
-                        value: 0.4,
-                        random: true,
-                        anim: {
-                            enable: true,
-                            speed: 1,
-                            opacity_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    size: {
-                        value: 3,
-                        random: true,
-                        anim: {
-                            enable: true,
-                            speed: 2,
-                            size_min: 0.1,
-                            sync: false
-                        }
-                    },
-                    line_linked: {
-                        enable: true,
-                        distance: 150,
-                        color: '#5D5CDE',
-                        opacity: 0.2,
-                        width: 1
-                    },
-                    move: {
-                        enable: true,
-                        speed: 1,
-                        direction: 'none',
-                        random: true,
-                        straight: false,
-                        out_mode: 'out',
-                        bounce: false,
-                        attract: {
-                            enable: true,
-                            rotateX: 600,
-                            rotateY: 1200
-                        }
-                    }
-                },
-                interactivity: {
-                    detect_on: 'canvas',
-                    events: {
-                        onhover: {
-                            enable: true,
-                            mode: 'grab'
-                        },
-                        onclick: {
-                            enable: true,
-                            mode: 'push'
-                        },
-                        resize: true
-                    },
-                    modes: {
-                        grab: {
-                            distance: 140,
-                            line_linked: {
-                                opacity: 0.5
-                            }
-                        },
-                        push: {
-                            particles_nb: 3
-                        }
-                    }
-                },
-                retina_detect: true
-            });
+    // Typing effect
+    function typeWriter(el, text, speed=50, cb) {
+      let i=0; el.innerHTML=''; el.classList.add('typing-text');
+      function type() {
+        if(i<text.length) { el.innerHTML+=text.charAt(i++); setTimeout(type, speed); }
+        else { el.classList.remove('typing-text'); if(cb) cb(); }
+      }
+      type();
+    }
+    window.addEventListener('load', () => {
+      const title = document.getElementById('typing-title');
+      typeWriter(title, title.textContent);
+    });
+
+    // particles.js init
+    if (typeof particlesJS !== 'undefined') {
+      particlesJS('particles-js', {
+        particles: {
+          number:{value:60, density:{enable:true,value_area:800}},
+          color:{value:'#5D5CDE'},
+          shape:{type:'circle',stroke:{width:0,color:'#000'}},
+          opacity:{value:0.4,random:true,anim:{enable:true,speed:1,opacity_min:0.1,sync:false}},
+          size:{value:3,random:true,anim:{enable:true,speed:2,size_min:0.1,sync:false}},
+          line_linked:{enable:true,distance:150,color:'#5D5CDE',opacity:0.2,width:1},
+          move:{enable:true,speed:1,direction:'none',random:true,straight:false,out_mode:'out',bounce:false,attract:{enable:true,rotateX:600,rotateY:1200}}
+        },
+        interactivity:{detect_on:'canvas',events:{onhover:{enable:true,mode:'grab'},onclick:{enable:true,mode:'push'},resize:true},modes:{grab:{distance:140,line_linked:{opacity:0.5}},push:{particles_nb:3}}},
+        retina_detect:true
+      });
+    }
+
+    // Three.js neural network
+    function initNeuralNetwork() {
+      if (typeof THREE === 'undefined') return;
+      const container = document.getElementById('neural-network');
+      if (!container) return;
+      const width = container.clientWidth, height = container.clientHeight;
+      const scene = new THREE.Scene();
+      const camera = new THREE.PerspectiveCamera(75, width/height, 0.1, 1000);
+      camera.position.z = 30;
+      const renderer = new THREE.WebGLRenderer({ alpha:true });
+      renderer.setSize(width, height);
+      renderer.setClearColor(0x000000, 0);
+      container.appendChild(renderer.domElement);
+
+      const nodeGeom = new THREE.SphereGeometry(0.25,16,16);
+      const nodeMat = new THREE.MeshBasicMaterial({ color:0x5D5CDE });
+      const nodes = [], positions = [];
+      const layers=4, perLayer=7;
+      for(let L=0; L<layers; L++){
+        for(let i=0; i<perLayer; i++){
+          const node = new THREE.Mesh(nodeGeom,nodeMat);
+          const x=(L-(layers-1)/2)*10, y=(i-(perLayer-1)/2)*3, z=0;
+          node.position.set(x,y,z);
+          scene.add(node);
+          nodes.push(node);
+          positions.push({x,y,z});
         }
-
-        // Neural network visualization with Three.js
-        function initNeuralNetwork() {
-            if (typeof THREE === 'undefined') return;
-            
-            const container = document.getElementById('neural-network');
-            if (!container) return;
-            
-            const width = container.clientWidth;
-            const height = container.clientHeight;
-            
-            // Create scene
-            const scene = new THREE.Scene();
-            
-            // Create camera
-            const camera = new THREE.PerspectiveCamera(75, width / height, 0.1, 1000);
-            camera.position.z = 30;
-            
-            // Create renderer
-            const renderer = new THREE.WebGLRenderer({ alpha: true });
-            renderer.setSize(width, height);
-            renderer.setClearColor(0x000000, 0);
-            container.appendChild(renderer.domElement);
-            
-            // Create nodes
-            const nodeGeometry = new THREE.SphereGeometry(0.25, 16, 16);
-            const nodeMaterial = new THREE.MeshBasicMaterial({ color: 0x5D5CDE });
-            
-            const nodes = [];
-            const nodePositions = [];
-            const layerCount = 4;
-            const nodesPerLayer = 7;
-            
-            // Create neural network nodes
-            for (let layer = 0; layer < layerCount; layer++) {
-                for (let i = 0; i < nodesPerLayer; i++) {
-                    const node = new THREE.Mesh(nodeGeometry, nodeMaterial);
-                    const xPos = (layer - (layerCount - 1) / 2) * 10;
-                    const yPos = (i - (nodesPerLayer - 1) / 2) * 3;
-                    const zPos = 0;
-                    
-                    node.position.set(xPos, yPos, zPos);
-                    scene.add(node);
-                    nodes.push(node);
-                    nodePositions.push({ x: xPos, y: yPos, z: zPos });
-                }
-            }
-            
-            // Create connections
-            const lineMaterial = new THREE.LineBasicMaterial({ 
-                color: 0x5D5CDE,
-                transparent: true,
-                opacity: 0.3
-            });
-            
-            const lines = [];
-            
-            // Connect adjacent layers
-            for (let layer = 0; layer < layerCount - 1; layer++) {
-                for (let i = 0; i < nodesPerLayer; i++) {
-                    for (let j = 0; j < nodesPerLayer; j++) {
-                        const startNode = layer * nodesPerLayer + i;
-                        const endNode = (layer + 1) * nodesPerLayer + j;
-                        
-                        const geometry = new THREE.BufferGeometry().setFromPoints([
-                            new THREE.Vector3(
-                                nodePositions[startNode].x,
-                                nodePositions[startNode].y,
-                                nodePositions[startNode].z
-                            ),
-                            new THREE.Vector3(
-                                nodePositions[endNode].x,
-                                nodePositions[endNode].y,
-                                nodePositions[endNode].z
-                            )
-                        ]);
-                        
-                        const line = new THREE.Line(geometry, lineMaterial);
-                        scene.add(line);
-                        lines.push(line);
-                    }
-                }
-            }
-            
-            // Animation
-            function animate() {
-                requestAnimationFrame(animate);
-                
-                // Pulse nodes
-                nodes.forEach((node, i) => {
-                    node.scale.x = 1 + 0.2 * Math.sin(Date.now() * 0.001 + i * 0.1);
-                    node.scale.y = 1 + 0.2 * Math.sin(Date.now() * 0.001 + i * 0.1);
-                    node.scale.z = 1 + 0.2 * Math.sin(Date.now() * 0.001 + i * 0.1);
-                });
-                
-                // Subtly rotate the entire network
-                scene.rotation.y = Math.sin(Date.now() * 0.0005) * 0.1;
-                scene.rotation.x = Math.cos(Date.now() * 0.0005) * 0.05;
-                
-                renderer.render(scene, camera);
-            }
-            
-            animate();
-            
-            // Handle window resize
-            window.addEventListener('resize', () => {
-                const width = container.clientWidth;
-                const height = container.clientHeight;
-                
-                camera.aspect = width / height;
-                camera.updateProjectionMatrix();
-                
-                renderer.setSize(width, height);
-            });
+      }
+      const lineMat = new THREE.LineBasicMaterial({ color:0x5D5CDE, transparent:true, opacity:0.3 });
+      for(let L=0; L<layers-1; L++){
+        for(let i=0; i<perLayer; i++){
+          for(let j=0; j<perLayer; j++){
+            const start = L*perLayer + i;
+            const end = (L+1)*perLayer + j;
+            const geom = new THREE.BufferGeometry().setFromPoints([
+              new THREE.Vector3(positions[start].x, positions[start].y, positions[start].z),
+              new THREE.Vector3(positions[end].x,   positions[end].y,   positions[end].z)
+            ]);
+            const line = new THREE.Line(geom, lineMat);
+            scene.add(line);
+          }
         }
-        
-        // Initialize neural network visualization
-        window.addEventListener('load', initNeuralNetwork);
-
-        // Initialize tilt effect
-        window.addEventListener('load', () => {
-            if (typeof VanillaTilt !== 'undefined') {
-                VanillaTilt.init(document.querySelectorAll('.glass-card'), {
-                    max: 5,
-                    speed: 300,
-                    glare: true,
-                    'max-glare': 0.1,
-                    gyroscope: true
-                });
-            }
+      }
+      function animate() {
+        requestAnimationFrame(animate);
+        nodes.forEach((n,i)=>{
+          const s = 1 + 0.2 * Math.sin(Date.now()*0.001 + i*0.1);
+          n.scale.set(s,s,s);
         });
+        scene.rotation.y = Math.sin(Date.now()*0.0005)*0.1;
+        scene.rotation.x = Math.cos(Date.now()*0.0005)*0.05;
+        renderer.render(scene,camera);
+      }
+      animate();
+      window.addEventListener('resize', ()=>{
+        const w=container.clientWidth, h=container.clientHeight;
+        camera.aspect=w/h; camera.updateProjectionMatrix();
+        renderer.setSize(w,h);
+      });
+    }
+    window.addEventListener('load', initNeuralNetwork);
 
-        // Reveal animations on scroll
-        function initRevealAnimations() {
-            const revealElements = document.querySelectorAll('section > div > h2, .glass-card');
-            revealElements.forEach(element => {
-                element.classList.add('reveal');
-            });
-            
-            function checkReveal() {
-                revealElements.forEach(element => {
-                    const rect = element.getBoundingClientRect();
-                    const windowHeight = window.innerHeight;
-                    
-                    if (rect.top <= windowHeight * 0.85) {
-                        element.classList.add('active');
-                    }
-                });
-            }
-            
-            window.addEventListener('scroll', checkReveal);
-            checkReveal(); // Check on initial load
-        }
-        
-        window.addEventListener('load', initRevealAnimations);
-
-        // Parallax effect
-        function initParallax() {
-            const parallaxElements = document.querySelectorAll('.glass-card, h1, h2');
-            parallaxElements.forEach(element => {
-                element.classList.add('parallax');
-            });
-            
-            document.addEventListener('mousemove', (e) => {
-                const x = e.clientX / window.innerWidth - 0.5;
-                const y = e.clientY / window.innerHeight - 0.5;
-                
-                parallaxElements.forEach(element => {
-                    const speed = 20;
-                    const xPos = -x * speed;
-                    const yPos = -y * speed;
-                    element.style.transform = `translate3d(${xPos}px, ${yPos}px, 0)`;
-                });
-            });
-        }
-        
-        // Only use parallax on devices that likely have a mouse
-        if (window.matchMedia('(min-width: 1024px)').matches) {
-            window.addEventListener('load', initParallax);
-        }
-
-        // Dark mode toggle
-        const setDarkMode = (isDark) => {
-            if (isDark) {
-                document.documentElement.classList.add('dark');
-            } else {
-                document.documentElement.classList.remove('dark');
-            }
-        };
-
-        // Check user preference
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
-            setDarkMode(true);
-        }
-
-        // Listen for changes in color scheme
-        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
-            setDarkMode(event.matches);
+    // VanillaTilt
+    window.addEventListener('load', ()=>{
+      if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll('.glass-card'), {
+          max:5, speed:300, glare:true, 'max-glare':0.1, gyroscope:true
         });
+      }
+    });
 
-        // Toggle button
-        document.getElementById('theme-toggle').addEventListener('click', () => {
-            const isDark = document.documentElement.classList.contains('dark');
-            setDarkMode(!isDark);
+    // Reveal on scroll
+    function initReveal() {
+      const elems = document.querySelectorAll('section > div > h2, .glass-card');
+      elems.forEach(el=>el.classList.add('reveal'));
+      function check() {
+        elems.forEach(el=>{
+          const r=el.getBoundingClientRect();
+          if(r.top <= window.innerHeight*0.85) el.classList.add('active');
         });
+      }
+      window.addEventListener('scroll', check);
+      check();
+    }
+    window.addEventListener('load', initReveal);
 
-        // Mobile menu toggle
-        document.getElementById('mobile-menu-button').addEventListener('click', () => {
-            const mobileMenu = document.getElementById('mobile-menu');
-            mobileMenu.classList.toggle('hidden');
+    // Parallax
+    function initParallax() {
+      const els = document.querySelectorAll('.glass-card, h1, h2');
+      els.forEach(el=>el.classList.add('parallax'));
+      document.addEventListener('mousemove', e=>{
+        const x=e.clientX/window.innerWidth - 0.5;
+        const y=e.clientY/window.innerHeight - 0.5;
+        els.forEach(el=>{
+          const speed=20;
+          el.style.transform = \`translate3d(${-x*speed}px, ${-y*speed}px, 0)\`;
         });
+      });
+    }
+    if (window.matchMedia('(min-width:1024px)').matches) {
+      window.addEventListener('load', initParallax);
+    }
 
-        // Handle clicks outside of mobile menu to close it
-        document.addEventListener('click', (event) => {
-            const mobileMenu = document.getElementById('mobile-menu');
-            const mobileMenuButton = document.getElementById('mobile-menu-button');
-            
-            if (!mobileMenu.contains(event.target) && !mobileMenuButton.contains(event.target) && !mobileMenu.classList.contains('hidden')) {
-                mobileMenu.classList.add('hidden');
-            }
-        });
+    // Dark mode
+    const setDark = isDark => {
+      if(isDark) document.documentElement.classList.add('dark');
+      else       document.documentElement.classList.remove('dark');
+    };
+    if(window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) setDark(true);
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e=>setDark(e.matches));
+    document.getElementById('theme-toggle').addEventListener('click', ()=>{
+      setDark(!document.documentElement.classList.contains('dark'));
+    });
 
-        // Handle contact form submission
-        document.getElementById('contact-form').addEventListener('submit', function(e) {
-            e.preventDefault();
-            
-            // Simulate form submission
-            const submitButton = this.querySelector('button[type="submit"]');
-            const originalText = submitButton.innerText;
-            
-            submitButton.disabled = true;
-            submitButton.innerText = 'Sending...';
-            
-            // Simulate API call
-            setTimeout(() => {
-                submitButton.innerText = 'Message Sent!';
-                this.reset();
-                
-                // Reset button after 3 seconds
-                setTimeout(() => {
-                    submitButton.innerText = originalText;
-                    submitButton.disabled = false;
-                }, 3000);
-            }, 1500);
-        });
-
-        // Neural glow effect for words
-        document.querySelectorAll('.neural-glow').forEach(element => {
-            element.addEventListener('mouseover', () => {
-                element.style.textShadow = '0 0 8px var(--primary), 0 0 12px var(--primary-light)';
-            });
-            
-            element.addEventListener('mouseout', () => {
-                element.style.textShadow = 'none';
-            });
-        });
-    </script>
+    // Mobile menu
+    document.getElementById('mobile-menu-button').addEventListener('click', ()=>{
+      document.getElementById('mobile-menu').classList.toggle('hidden');
+    });
+    document.addEventListener('click', e=>{
+      const menu = document.getElementById('mobile-menu');
+      const btn  = document.getElementById('mobile-menu-button');
+      if(!menu.contains(e.target) && !btn.contains(e.target) && !menu.classList.contains('hidden')) {
+        menu.classList.add('hidden');
+      }
+    });
+  </script>
 </body>
 </html>
+
